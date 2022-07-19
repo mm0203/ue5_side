@@ -6,10 +6,11 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 AsideCharacter::AsideCharacter()
 {
-	// Set size for collision capsule
+	// “–‚½‚è”»’è‚ÌƒTƒCƒY
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
 	// Don't rotate when the controller rotates.
@@ -40,6 +41,11 @@ AsideCharacter::AsideCharacter()
 	GetCharacterMovement()->GroundFriction = 3.f;
 	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 	GetCharacterMovement()->MaxFlySpeed = 600.f;
+
+	CapsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CollisionComp"));
+	CapsuleComp->SetupAttachment(RootComponent);
+
+	CapsuleComp->OnComponentHit.AddDynamic(this, &AsideCharacter::OnHit);
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
@@ -75,4 +81,11 @@ void AsideCharacter::TouchStopped(const ETouchIndex::Type FingerIndex, const FVe
 {
 	StopJumping();
 }
+
+
+void AsideCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	
+}
+
 
